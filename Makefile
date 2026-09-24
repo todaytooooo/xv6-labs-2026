@@ -203,6 +203,9 @@ UPROGS=\
 	$U/_forphan\
 	$U/_dorphan\
 	$U/_sync\
+	$U/_forkdemo\
+	$U/_execdemo\
+	$U/_mysh\
 
 
 
