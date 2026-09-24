@@ -60,6 +60,49 @@ main(int argc, char *argv[])
 void
 memdump(char *fmt, char *data, int len)
 {
-  // Your code here.  `data` holds `len` valid bytes.
-
+  int off = 0, n, i;
+  char *s;
+  for (i = 0; fmt[i]; i++) {
+    switch (fmt[i]) {
+    case 'c':
+      n = sizeof(char);
+      if (off + n > len) goto short_data;
+      printf("%c\n", data[off]);
+      break;
+    case 'h':
+      n = sizeof(short);
+      if (off + n > len) goto short_data;
+      printf("%d\n", *(short *)(data + off));
+      break;
+    case 'i':
+      n = sizeof(int);
+      if (off + n > len) goto short_data;
+      printf("%d\n", *(int *)(data + off));
+      break;
+    case 'p':
+      n = sizeof(uint64);
+      if (off + n > len) goto short_data;
+      printf("%lu\n", *(uint64 *)(data + off));
+      break;
+    case 's':
+      n = sizeof(uint64);
+      if (off + n > len) goto short_data;
+      s = *(char **)(data + off);
+      printf("%s\n", s);
+      break;
+    case 'S':
+      n = 0;
+      while (off + n < len && data[off + n]) n++;
+      if (off + n >= len) goto short_data;
+      printf("%s\n", data + off);
+      break;
+    default:
+      printf("memdump: unknown format %c\n", fmt[i]);
+      exit(1);
+    }
+    off += n;
+  }
+  return;
+short_data:
+  printf("memdump: not enough data\n");
 }
